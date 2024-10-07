@@ -1,59 +1,59 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // your code here
-  const taskForm = document.getElementById(`create-task-form`);
-  const taskInput = document.getElementById(`new-task-description`);
-  const taskPriority = document.getElementById(`task-priority`);
-  const taskList = document.getElementById(`tasks`);
-
-  //Function to render tasks
-  function renderTasks(task) {
-    const li = document.createElement(`li`);
-    li.textContent = task.description;
-
-    //Set the color based on priority
-    switch (task.priority) {
-      case `high`:
-        li.style.color = `red`;
-        break;
-        case `medium`:
-        li.style.color = `yellow`;
-        break;
-        case `low`:
-        li.style.color = `green`;
-        break;
-    };
-
-    //Create a delete button
-    const deleteButton = document.createElement(`button`);
-    deleteButton.textContent = `x`;
-    deleteButton.onclick = function() {
-      //Remove the task from the list
-      taskList.removeChild(li);
-    };
-
-    //Add the delete buttton to the list item
-    li.appendChild(deleteButton);
-    //Add the new task to the list
-    taskList.appendChild(li);
-  }
-
-  //Function to handle form submission
-  taskForm.addEventListener(`submit`, function(event) {
-    event.preventDefault();
-
-    const taskText = taskInput.ariaValueMax.trim();
-    const priorityValue = taskPriority.value;
-
-    if (taskText) {
-      const newTask =m{
-        description: taskText,
-        priority: priorityValue
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('create-task-form');
+  const tasksList = document.getElementById('tasks');
+  let tasksArray = [];
+  form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const taskDescription = document.getElementById('new-task-description').value;
+      const priority = document.getElementById('task-priority').value;
+      if (taskDescription === '') {
+          alert('Task description cannot be empty!');
+          return;
+      }
+      const task = {
+          description: taskDescription,
+          priority: priority,
       };
-      //Render the new task
-      renderTasks(newTask);
-      //Clear the form
-      taskForm.requestFullscreen();
-    }
-  })
+      tasksArray.push(task);
+      renderTasks(tasksArray);
+      form.reset();
+      function renderTasks(tasks) {
+          tasksList.innerHTML = '';
+          tasks.forEach((task, index) => {
+              const li = document.createElement('li');
+              li.innerHTML = ` Task at hand :${task.description}  - Priority: ${task.priority}
+                              <button class="delete-btn" data-index="${index}">Delete</button>`;
+              tasksList.appendChild(li);
+              });
+              addDeleteListeners();
+          }
+          function addDeleteListeners() {
+              const deleteButtons = document.querySelectorAll('.delete-btn');
+              deleteButtons.forEach(button => {
+              button.addEventListener('click', (e) => {
+                  const taskIndex = e.target.getAttribute('data-index');
+tasksArray.splice(taskIndex, 1);
+renderTasks(tasksArray);
 });
-    
+});
+}
+sortAscBtn.addEventListener('click', () => {
+  tasksArray.sort((a, b) => a.description.localeCompare(b.description));
+  renderTasks(tasksArray);
+});
+sortDescBtn.addEventListener('click', () => {
+  tasksArray.sort((a, b) => b.description.localeCompare(a.description));
+renderTasks(tasksArray);
+});
+  });
+
+
+
+
+
+
+
+
+
+
+})
